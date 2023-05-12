@@ -1,0 +1,17 @@
+- name: My first play
+  hosts: my_machines
+  roles:
+    - common
+  tasks:
+    - name: Ping my hosts
+      ansible.builtin.ping:
+    - name: Print message
+      ansible.builtin.debug:
+        msg: Hello world
+    - name: Copy file with owner and permissions
+      ansible.builtin.copy:
+        src: /control/script_to_copy.sh
+        dest: /tmp/script_to_copy.sh
+        owner: root
+        group: root
+        mode: '0744'

@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  host:
+    build: ./host
+    privileged: true
+    depends_on:
+      control:
+        condition: service_healthy
+    ports:
+      - "2222:22"
+    volumes:
+          - ./host:/host
+          - ./ssh-key:/ssh-key
+  control:
+    build: ./control
+    healthcheck:
+      test: ["CMD", "test", "-f", "/ssh-key/ansible-control"]
+      interval: 2s
+      timeout: 10s
+      retries: 5
+    volumes:
+          - ./control:/control
+          - ./ssh-key:/ssh-key
