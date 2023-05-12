@@ -1,0 +1,12 @@
+[Unit]
+Description=Bootstrap host
+After=local-fs.target
+After=network.target
+
+[Service]
+ExecStart=/host/bootstrap.sh
+RemainAfterExit=true
+Type=oneshot
+
+[Install]
+WantedBy=multi-user.target
