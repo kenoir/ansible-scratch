@@ -1,0 +1,12 @@
+[Unit]
+Description=Timer to run my-service.service
+
+[Timer]
+Unit=my-service.service
+# Every 15 seconds
+OnCalendar=*:*:0,15,30,45
+# Will run regardless of shutdowns (not necessary here, but demonstrative)
+Persistent=True
+
+[Install]
+WantedBy=timers.target

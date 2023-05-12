@@ -1,0 +1,8 @@
+[Unit]
+Description=My Service
+
+[Service]
+ExecStart=/bin/bash /tmp/script_to_copy.sh
+
+[Install]
+WantedBy=multi-user.target

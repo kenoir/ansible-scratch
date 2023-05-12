@@ -1,0 +1,3 @@
+---
+aws_system_user: root
+aws_profile: my_profile

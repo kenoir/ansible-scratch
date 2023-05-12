@@ -1,17 +1,53 @@
 - name: My first play
   hosts: my_machines
+  vars_files:
+    - vars/main.yml
+  vars:
+#    This is possible if we have boto installed ...
+#    aws_access_key: "{{ lookup('amazon.aws.aws_secret', '/path/to/secrets', bypath=true) }}"
+    aws_access_key: nope
+    aws_secret_key: nope
+    some_rubbish:
+      my_key: thekeys
+      my_secret: thesecrets
   roles:
     - common
+    - awscli
   tasks:
     - name: Ping my hosts
-      ansible.builtin.ping:
+      ping:
     - name: Print message
-      ansible.builtin.debug:
+      debug:
         msg: Hello world
+    - name: Install python
+      yum:
+        name: python38
+        state: latest
     - name: Copy file with owner and permissions
-      ansible.builtin.copy:
+      copy:
+        dest: /tmp/configuration.json
+        content: "{{ some_rubbish | to_json }}"
+    - name: Copy file with owner and permissions
+      copy:
         src: /control/script_to_copy.sh
         dest: /tmp/script_to_copy.sh
         owner: root
         group: root
         mode: '0744'
+
+    - name: My Service | Create Unit file
+      template: src=my-service.service dest=/etc/systemd/system/my-service.service mode=644
+      notify:
+        - reload systemctl
+    - name: My Service | Start service
+      service: name=my-service.service enabled=yes
+
+    - name: My Service Timer | Create Unit file
+      template: src=my-service.timer dest=/etc/systemd/system/my-service.timer mode=644
+      notify:
+        - reload systemctl
+    - name: My Service Timer | Start service
+      service: name=my-service.timer state=started enabled=yes
+  handlers:
+    - name: reload systemctl
+      command: systemctl daemon-reload
