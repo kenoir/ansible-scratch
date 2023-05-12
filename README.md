@@ -10,10 +10,9 @@ Start the containers:
 docker-compose up --build
 ```
 
-Connect to host or control node:
+Connect to host or control node to either run an Ansible playbook, or review the results on the host:
 
 ```shell
 # Outputs the docker command to connect
 ./scripts/connect_to_containers.sh
 ```
-
